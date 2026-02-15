@@ -1,0 +1,16 @@
+# Python скомпільовані файли
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Дані (Parquet/CSV) - НЕ КОМІТИМО!
+data/
+
+# Логи Airflow та Spark
+logs/
+spark-logs/
+spark-logs-2/
+
+# Системні файли Mac
+.DS_Store
