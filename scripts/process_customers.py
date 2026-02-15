@@ -52,13 +52,13 @@ def bronze_to_silver():
         df_final.write.mode("overwrite").parquet(path_silver)
         print(f"Successfully MERGED data into {path_silver}")
    
-    print(f"Successfully saved Bronze data to {path_silver}")
+    print(f"Successfully saved Silver data to {path_silver}")
 
     spark.stop()
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python process_sales.py [bronze|silver]")
+        print("Usage: python process_customers.py [bronze|silver]")
         sys.exit(1)
         
     action = sys.argv[1]

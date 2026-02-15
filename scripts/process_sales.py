@@ -4,9 +4,9 @@ from pyspark.sql import functions as F
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DecimalType, DateType
 from data_quality import check_silver_sales_quality
 
-raw_path = "/opt/airflow/data/raw/sales/*/*" 
-bronze_path = "/opt/airflow/data/bronze/sales"
-silver_path = "/opt/airflow/data/silver/sales"
+path_raw = "/opt/airflow/data/raw/sales/*/*" 
+path_bronze = "/opt/airflow/data/bronze/sales"
+path_silver = "/opt/airflow/data/silver/sales"
 
 def get_spark():
     return SparkSession.builder \
@@ -25,9 +25,9 @@ def raw_to_bronze():
         StructField("Price", StringType(), True)
     ])
     
-    df = spark.read.csv(raw_path, header=True, schema=raw_schema)
-    df.write.mode("overwrite").parquet(bronze_path)
-    print(f"Successfully saved Bronze data to {bronze_path}")
+    df = spark.read.csv(path_raw, header=True, schema=raw_schema)
+    df.write.mode("overwrite").parquet(path_bronze)
+    print(f"Successfully saved Bronze data to {path_bronze}")
     spark.stop()
 
 
@@ -35,7 +35,7 @@ def bronze_to_silver():
     spark = get_spark()
     print("--- Starting Bronze to Silver ---")
     
-    df_bronze = spark.read.parquet(bronze_path)
+    df_bronze = spark.read.parquet(path_bronze)
     
     clean_input = F.trim(F.col("PurchaseDate"))
     flexible_date = F.coalesce(
@@ -53,8 +53,8 @@ def bronze_to_silver():
 
     if check_silver_sales_quality(df_silver, "Sales_Silver"):
         print("Data quality check passed. Writing to Silver.")
-        df_silver.write.mode("overwrite").partitionBy("purchase_date").parquet(silver_path)
-        print(f"Successfully saved Bronze data to {silver_path}")
+        df_silver.write.mode("overwrite").partitionBy("purchase_date").parquet(path_silver)
+        print(f"Successfully saved Silver data to {path_silver}")
     else:
         print("Data quality check failed. Aborting write.")
 

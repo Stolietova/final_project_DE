@@ -14,6 +14,7 @@ default_args = {
 
 with DAG(
     dag_id="process_sales_pipeline",
+    default_args=default_args,
     schedule_interval=None,
     catchup=False,
 ) as dag:
