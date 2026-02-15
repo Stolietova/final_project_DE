@@ -18,14 +18,20 @@ with DAG(
     catchup=False,
 ) as dag:
 
-    task_user_profiles_raw_to_bronze = BashOperator(
-        task_id="user_profiles_raw_to_bronze",
-        bash_command="python /opt/airflow/scripts/process_user_profiles.py bronze"
-    )
+    # task_user_profiles_raw_to_bronze = BashOperator(
+    #     task_id="user_profiles_raw_to_bronze",
+    #     bash_command="python /opt/airflow/scripts/process_user_profiles.py bronze"
+    # )
 
-    task_user_profiles_bronze_to_silver = BashOperator(
-        task_id="user_profiles_bronze_to_silver",
-        bash_command="python /opt/airflow/scripts/process_user_profiles.py silver"
-    )
+    # task_user_profiles_bronze_to_silver = BashOperator(
+    #     task_id="user_profiles_bronze_to_silver",
+    #     bash_command="python /opt/airflow/scripts/process_user_profiles.py silver"
+    # )
 
-    task_user_profiles_raw_to_bronze >> task_user_profiles_bronze_to_silver
+    task_customer_data_enrichment = BashOperator(
+        task_id="customer_silver_to_gold",
+        bash_command="python /opt/airflow/scripts/enrich_user_profiles.py"
+    )
+ 
+    task_customer_data_enrichment
+    # task_user_profiles_raw_to_bronze >> task_user_profiles_bronze_to_silver >> task_customer_data_enrichment

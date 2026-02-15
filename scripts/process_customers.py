@@ -10,7 +10,7 @@ path_silver = "/opt/airflow/data/silver/customers"
 
 def get_spark():
     return SparkSession.builder \
-        .appName("process_sales") \
+        .appName("process_customers") \
         .master("local[*]") \
         .getOrCreate()
 
